@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz da Billie Eilish</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #e1e1e1;
+            text-align: center;
+        }
+
+        header {
+            background-color: #1db954;
+            padding: 20px;
+            font-size: 2em;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px #000;
+        }
+
+        .quiz-container {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 600px;
+            border: 2px solid #1db954;
+            border-radius: 10px;
+            background-color: #1e1e1e;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .question {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 10px;
+            font-size: 1.2em;
+            color: #121212;
+            background-color: #1db954;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .option:hover {
+            background-color: #1ed760;
+        }
+
+        .progress {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.8em;
+            color: #aaa;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>O que sabes sobre Billie Eilish?</header>
+
+    <div class="quiz-container">
+        <div id="quiz">
+            <div class="question" id="question">A pergunta aparecerá aqui</div>
+            <div class="options" id="options"></div>
+            <div class="feedback" id="feedback"></div>
+            <div class="progress" id="progress">Pergunta 1 de 10</div>
+        </div>
+
+        <div id="result" class="hidden">
+            <h2>Sua pontuação: <span id="score">0</span>/10</h2>
+            <p id="final-message"></p>
+            <button class="option" onclick="restartQuiz()">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <footer>&copy; Billie game | Criado por Anacleto Santiago.
+
+       <b1></b1> Para mais sites me contacte:
+
+        insta: _anacleto_s
+    </footer>
+
+    </b1>
+
+    <script>
+        const questions = [
+            { question: "Qual é o nome do meio de Billie Eilish?", options: ["Pirate", "Ocean", "Rain", "Sky"], answer: 0 },
+            { question: "Em que ano Billie lançou 'Ocean Eyes'?", options: ["2015", "2017", "2019", "2020"], answer: 0 },
+            { question: "Qual é o nome do álbum de estreia de Billie?", options: ["Happier Than Ever", "When We All Fall Asleep, Where Do We Go?", "Don't Smile At Me", "Everything I Wanted"], answer: 1 },
+            { question: "Qual membro da família co-escreve as músicas de Billie?", options: ["Irmão", "Mãe", "Pai", "Primo"], answer: 0 },
+            { question: "Qual é a cor favorita de Billie?", options: ["Verde Neon", "Preto", "Azul", "Amarelo"], answer: 0 },
+            { question: "Qual música deu a Billie seu primeiro Grammy?", options: ["Bad Guy", "Ocean Eyes", "Bury A Friend", "Everything I Wanted"], answer: 0 },
+            { question: "Qual é o nome da aranha de estimação de Billie?", options: ["Coolio", "Sparky", "Archie", "Spiderella"], answer: 2 },
+            { question: "Em qual cidade Billie nasceu?", options: ["Los Angeles", "Nova York", "Londres", "Chicago"], answer: 0 },
+            { question: "Qual é o signo do zodíaco de Billie?", options: ["Sagitário", "Escorpião", "Capricórnio", "Peixes"], answer: 1 },
+            { question: "Qual é o título do documentário de Billie?", options: ["The World's A Little Blurry", "Bad Guy", "Inside Billie", "Happier Than Ever"], answer: 0 }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        const questionElement = document.getElementById("question");
+        const optionsElement = document.getElementById("options");
+        const progressElement = document.getElementById("progress");
+        const feedbackElement = document.getElementById("feedback");
+        const resultElement = document.getElementById("result");
+        const quizElement = document.getElementById("quiz");
+        const scoreElement = document.getElementById("score");
+        const finalMessageElement = document.getElementById("final-message");
+
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            questionElement.textContent = question.question;
+            optionsElement.innerHTML = "";
+            feedbackElement.textContent = "";
+
+            question.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.className = "option";
+                button.textContent = option;
+                button.onclick = () => checkAnswer(index);
+                optionsElement.appendChild(button);
+            });
+
+            progressElement.textContent = `Pergunta ${currentQuestion + 1} de ${questions.length}`;
+        }
+
+        function checkAnswer(selected) {
+            const question = questions[currentQuestion];
+            if (selected === question.answer) {
+                score++;
+                feedbackElement.textContent = "Correto! tiveste sorte...";
+                feedbackElement.style.color = "#1db954";
+            } else {
+                feedbackElement.textContent = "Errado! fã falsooo";
+                feedbackElement.style.color = "#ff4c4c";
+            }
+
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    loadQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1500);
+        }
+
+        function showResult() {
+            quizElement.classList.add("hidden");
+            resultElement.classList.remove("hidden");
+            scoreElement.textContent = score;
+
+            if (score === 10) {
+                finalMessageElement.textContent = "Incrível! Você é um fã dedicado da Billie Eilish!, Depois de min é claro!";
+            } else if (score >= 7) {
+                finalMessageElement.textContent = "Muito bom! Você conhece bastante sobre Billie, kkk.";
+            } else if (score >= 4) {
+                finalMessageElement.textContent = "Você sabe algumas coisas, mas pode aprender mais.";
+            } else {
+                finalMessageElement.textContent = "Parece que você não conhece muito sobre Billie. Que tal ouvir mais músicas dela?";
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            quizElement.classList.remove("hidden");
+            resultElement.classList.add("hidden");
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
